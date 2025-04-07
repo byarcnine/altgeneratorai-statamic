@@ -23,7 +23,7 @@ class AltGeneratorController extends CpController
         }
 
         // Paginate the combined collection
-        $perPage = 50;
+        $perPage = 25;
         $currentPage = request()->get('page', 1);
         $paginatedAssets = $assets->forPage($currentPage, $perPage);
         $assets = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -79,7 +79,7 @@ class AltGeneratorController extends CpController
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-access-token' => $access_token,
-            ])->post('https://api.alt-generator.ai/generate', $body_data);
+            ])->timeout(120)->post('https://api.alt-generator.ai/generate', $body_data);
             Log::info($response->json());
             $generatedAlt = $response->successful()
                 ? $response->json()['alt'][0]

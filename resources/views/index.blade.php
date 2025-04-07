@@ -75,11 +75,11 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="flex justify-end mt-4">
+                <button type="submit" class="btn-primary">Generate Alt Text for Selected</button>
+                <button id="bulk-approve-btn" class="btn-primary ml-2">Bulk Approve</button>
+            </div>
         </form>
-        <div class="flex justify-end mt-4">
-            <button type="submit" class="btn-primary">Generate Alt Text for Selected</button>
-            <button id="bulk-approve-btn" class="btn-primary ml-2">Bulk Approve</button>
-        </div>
 
         @if($assets->hasPages())
         <div class="mt-4 flex items-center justify-center nav-pagination">
@@ -259,12 +259,24 @@
                 });
 
                 // Handle bulk approval
-                document.getElementById('bulk-approve-btn')?.addEventListener('click', function() {
+                document.getElementById('bulk-approve-btn')?.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const approvals = {};
-                    document.querySelectorAll('.generated-alt').forEach(cell => {
-                        const assetId = cell.getAttribute('data-asset-id');
-                        approvals[assetId] = cell.innerText;
+                    const selectedCheckboxes = document.querySelectorAll('input[name="asset_ids[]"]:checked');
+
+                    if (selectedCheckboxes.length === 0) {
+                        alert('Please select at least one asset to approve.');
+                        return;
+                    }
+
+                    selectedCheckboxes.forEach(checkbox => {
+                        const assetId = checkbox.value;
+                        const cell = document.querySelector(`.generated-alt[data-asset-id="${assetId}"]`);
+                        if (cell) {
+                            approvals[assetId] = cell.querySelector('.alt-text-content').innerText;
+                        }
                     });
+
                     approveAlt(approvals, "Approved " + Object.keys(approvals).length + " assets");
                 });
 
