@@ -1,0 +1,16 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Arcnine\AltGeneratorAI\Http\Controllers\AltGeneratorController;
+
+Route::group([
+    'middleware' => [
+        'api',
+    ],
+], function () {
+    // Generate alt text for selected assets.
+    Route::post('altgeneratorai/generate', [AltGeneratorController::class, 'generate'])->name('altgeneratorai.generate');
+
+    // Approve (save) the generated alt text.
+    Route::post('altgeneratorai/approve', [AltGeneratorController::class, 'approve'])->name('altgeneratorai.approve');
+});

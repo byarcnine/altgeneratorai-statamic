@@ -1,0 +1,37 @@
+{
+    "name": "arcnine/altgeneratorai",
+    "autoload": {
+        "psr-4": {
+            "Arcnine\\AltGeneratorAI\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcnine\\AltGeneratorAI\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "statamic/cms": "^5.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Altgeneratorai",
+            "description": "Altgeneratorai addon"
+        },
+        "laravel": {
+            "providers": [
+                "Arcnine\\AltGeneratorAI\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
