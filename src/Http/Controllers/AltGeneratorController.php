@@ -12,7 +12,10 @@ class AltGeneratorController extends CpController
 {
     public function index()
     {
-        return view('altgeneratorai::index');
+        $is_api_key_set = env('ALT_GENERATOR_API_KEY') ? true : false;
+        return view('altgeneratorai::index', [
+            'is_api_key_set' => $is_api_key_set,
+        ]);
     }
 
     public function generate(Request $request)
