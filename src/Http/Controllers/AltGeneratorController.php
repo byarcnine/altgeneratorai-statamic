@@ -12,44 +12,7 @@ class AltGeneratorController extends CpController
 {
     public function index()
     {
-        // Get all asset containers
-        $containers = \Statamic\Facades\AssetContainer::all();
-        $assets = collect();
-
-        // Get assets from each container
-        foreach ($containers as $container) {
-            $containerAssets = $container->queryAssets()->get();
-            $assets = $assets->concat($containerAssets);
-        }
-
-        // Paginate the combined collection
-        $perPage = 25;
-        $currentPage = request()->get('page', 1);
-        $paginatedAssets = $assets->forPage($currentPage, $perPage);
-        $assets = new \Illuminate\Pagination\LengthAwarePaginator(
-            $paginatedAssets,
-            $assets->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url()]
-        );
-
-        $data = [];
-        foreach ($assets as $asset) {
-            $currentAlt = $asset->get('alt') ?? '';
-            // Dummy generated alt text. Replace with your alt-text generation logic.
-            $generatedAlt = "";
-
-            $data[] = [
-                'id' => $asset->id(),
-                'filename' => $asset->filename(),
-                'url' => $asset->url(),
-                'current_alt' => $currentAlt,
-                'generated_alt' => $generatedAlt,
-                'preview_url' => $asset->thumbnailUrl('small'),
-            ];
-        }
-        return view('altgeneratorai::index', compact('data', 'assets'));
+        return view('altgeneratorai::index');
     }
 
     public function generate(Request $request)
@@ -111,6 +74,53 @@ class AltGeneratorController extends CpController
         return response()->json([
             'status' => 'success',
             'message' => 'Alt text approved for selected assets.',
+        ]);
+    }
+
+    public function assets(Request $request)
+    {
+        // Get all asset containers
+        $containers = \Statamic\Facades\AssetContainer::all();
+        $assets = collect();
+
+        // Get assets from each container
+        foreach ($containers as $container) {
+            $containerAssets = $container->queryAssets()->get();
+            $assets = $assets->concat($containerAssets);
+        }
+
+        // Paginate the combined collection
+        $perPage = 25;
+        $currentPage = $request->get('page', 1);
+        $paginatedAssets = $assets->forPage($currentPage, $perPage);
+        $assets = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedAssets,
+            $assets->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url()]
+        );
+
+        $data = [];
+        foreach ($assets as $asset) {
+            $currentAlt = $asset->get('alt') ?? '';
+            $data[] = [
+                'id' => $asset->id(),
+                'filename' => $asset->filename(),
+                'url' => $asset->url(),
+                'current_alt' => $currentAlt,
+                'generated_alt' => '',
+                'preview_url' => $asset->thumbnailUrl('small'),
+                'is_approved' => false,
+            ];
+        }
+
+        return response()->json([
+            'data' => $data,
+            'current_page' => $assets->currentPage(),
+            'last_page' => $assets->lastPage(),
+            'per_page' => $perPage,
+            'total' => $assets->total(),
         ]);
     }
 }

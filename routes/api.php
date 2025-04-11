@@ -8,6 +8,9 @@ Route::group([
         'api',
     ],
 ], function () {
+    // Get paginated assets
+    Route::get('altgeneratorai/assets', [AltGeneratorController::class, 'assets'])->name('altgeneratorai.assets');
+
     // Generate alt text for selected assets.
     Route::post('altgeneratorai/generate', [AltGeneratorController::class, 'generate'])->name('altgeneratorai.generate');
 

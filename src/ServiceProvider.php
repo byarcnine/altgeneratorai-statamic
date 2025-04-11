@@ -7,6 +7,13 @@ use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    protected $vite = [
+        'input' => [
+            'resources/js/app.js',
+        ],
+        'publicDirectory' => 'resources/dist',
+    ];
+
     public function boot()
     {
         parent::boot();
