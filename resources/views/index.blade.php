@@ -26,6 +26,9 @@
 @section('content')
 @if ($is_api_key_set)
 <aialtgen />
+<script>
+    window.csrf_token = "{{ csrf_token() }}";
+</script>
 @else
 <div class="flex flex-col h-screen">
     <h1 class="text-2xl font-bold mb-4">Alt Generator AI</h1>
@@ -36,6 +39,3 @@
 </div>
 @endif
 @endsection
-
-@push('scripts')
-@endpush

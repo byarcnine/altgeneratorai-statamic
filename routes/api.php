@@ -5,7 +5,8 @@ use Arcnine\AltGeneratorAI\Http\Controllers\AltGeneratorController;
 
 Route::group([
     'middleware' => [
-        'api',
+        'web',
+        'statamic.cp.authenticated',
     ],
 ], function () {
     // Get paginated assets

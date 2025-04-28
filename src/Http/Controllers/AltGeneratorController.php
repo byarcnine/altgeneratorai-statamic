@@ -7,9 +7,11 @@ use Statamic\Http\Controllers\CP\CpController;
 use Statamic\Assets\Asset;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Statamic\Facades\User;
 
 class AltGeneratorController extends CpController
 {
+
     public function index()
     {
         $is_api_key_set = env('ALT_GENERATOR_API_KEY') ? true : false;
@@ -82,6 +84,8 @@ class AltGeneratorController extends CpController
 
     public function assets(Request $request)
     {
+        $user = User::current();
+        abort_unless($user, 403, 'Unauthorized');
         // Get all asset containers
         $containers = \Statamic\Facades\AssetContainer::all();
         $assets = collect();
