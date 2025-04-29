@@ -37,8 +37,12 @@ class AltGeneratorController extends CpController
                     'error' => 'API key not found. Please check your environment variables.',
                 ], 500);
             }
+            $url = env('APP_URL') . $asset->url();
+            if (env('ALT_GENERATOR_ASSET_PREFIX')) {
+                $url = env('ALT_GENERATOR_ASSET_PREFIX') . $asset->url();
+            }
             $body_data = [
-                'url' => env('APP_URL') . $asset->url(),
+                'url' => $url,
                 'language' => [config('app.locale', 'en')],
                 'existingAltText' => $asset->get('alt', ''),
                 'assetId' => $asset->id(),
