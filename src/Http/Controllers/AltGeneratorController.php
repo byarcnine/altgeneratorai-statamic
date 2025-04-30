@@ -96,7 +96,7 @@ class AltGeneratorController extends CpController
 
         // Get assets from each container
         foreach ($containers as $container) {
-            $containerAssets = $container->queryAssets()->get();
+            $containerAssets = $container->queryAssets()->where('is_image', true)->get();
             $assets = $assets->concat($containerAssets);
         }
 
