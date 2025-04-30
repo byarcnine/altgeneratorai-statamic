@@ -2,34 +2,34 @@
 @tailwind utilities;
 
 .btn-primary {
-    @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors;
+  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors;
 }
 
 .btn-sm {
-    @apply px-3 py-1 text-sm;
+  @apply px-3 py-1 text-sm;
 }
 
 .card {
-    @apply bg-white rounded-lg shadow;
+  @apply bg-white rounded-lg shadow;
 }
 
 .data-table {
-    @apply w-full border-collapse;
+  @apply w-full border-collapse;
 }
 
 .data-table th,
 .data-table td {
-    @apply border border-gray-200 px-4 py-2;
+  @apply border border-gray-200 px-4 py-2;
 }
 
 .data-table th {
-    @apply bg-gray-50 text-left;
+  @apply bg-gray-50 text-left;
 }
 
 .alt-text-skeleton {
-    @apply animate-pulse;
+  @apply animate-pulse;
 }
 
 .alt-text-content {
-    @apply whitespace-pre-wrap;
+  @apply whitespace-pre-wrap;
 }
