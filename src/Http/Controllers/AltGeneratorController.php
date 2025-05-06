@@ -8,6 +8,7 @@ use Statamic\Assets\Asset;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Statamic\Facades\User;
+use Statamic\Facades\Site;
 
 class AltGeneratorController extends CpController
 {
@@ -17,6 +18,7 @@ class AltGeneratorController extends CpController
         $is_api_key_set = env('ALT_GENERATOR_API_KEY') ? true : false;
         return view('altgeneratorai::index', [
             'is_api_key_set' => $is_api_key_set,
+            'language' => Site::current()->locale()
         ]);
     }
 
@@ -37,20 +39,26 @@ class AltGeneratorController extends CpController
                     'error' => 'API key not found. Please check your environment variables.',
                 ], 500);
             }
+            $languages = [];
+            foreach (Site::all() as $site) {
+                $languages[] = substr($site->locale(), 0, 2);
+            }
+            $asset_url = $asset->url();
+            if (!str_starts_with($asset_url, 'http')) {
+                $asset_url = config('app.url') . $asset_url;
+            }
             $body_data = [
-                'url' => $asset->url(),
-                'language' => [config('app.locale', 'en')],
+                'url' => $asset_url,
+                'language' => $languages,
                 'existingAltText' => $asset->get('alt', ''),
                 'assetId' => $asset->id(),
             ];
-            Log::info($body_data);
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-access-token' => $access_token,
             ])->timeout(120)->post('https://api.alt-generator.ai/generate', $body_data);
-            Log::info($response->json());
             $generatedAlt = $response->successful()
-                ? $response->json()['alt'][0]
+                ? $response->json()['alt']
                 : "Failed to generate alt text for " . $asset->filename();
 
             $generatedTexts[$assetId] = $generatedAlt;
@@ -66,15 +74,24 @@ class AltGeneratorController extends CpController
     public function approve(Request $request)
     {
         $approvals = $request->input('approvals', []); // Expect an array: assetId => newAlt text
+        $languages = [];
+        foreach (Site::all() as $site) {
+            $languages[] = substr($site->locale(), 0, 2);
+        }
 
         foreach ($approvals as $assetId => $newAlt) {
             $asset = Asset::find($assetId);
             if (!$asset) {
                 continue;
             }
-            // Update the asset meta; assumes the alt text is stored under 'alt'
-            $asset->set('alt', $newAlt);
-            $asset->save();
+            foreach ($languages as $index => $language) {
+                if ($languages[0] === $language) {
+                    $asset->set('alt', $newAlt[$index]);
+                } else {
+                    $asset->set('alt_' . $language, $newAlt[$index]);
+                }
+                $asset->save();
+            }
         }
         return response()->json([
             'status' => 'success',

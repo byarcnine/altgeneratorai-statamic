@@ -18,7 +18,7 @@
     <td>{{ asset.current_alt }}</td>
     <td>
       <div v-if="asset.generated_alt" class="alt-text-content">
-        {{ asset.generated_alt }}
+        {{ asset.generated_alt[0] }}
       </div>
       <div v-else-if="isGenerating" class="alt-text-skeleton">
         <div>
