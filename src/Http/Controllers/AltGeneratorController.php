@@ -52,6 +52,7 @@ class AltGeneratorController extends CpController
                 'language' => $languages,
                 'existingAltText' => $asset->get('alt', ''),
                 'assetId' => $asset->id(),
+                'filename' => $asset->filename(),
             ];
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
