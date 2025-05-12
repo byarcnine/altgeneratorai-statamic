@@ -15,7 +15,7 @@ class AltGeneratorController extends CpController
 
     public function index()
     {
-        $is_api_key_set = env('ALT_GENERATOR_API_KEY') ? true : false;
+        $is_api_key_set = config('altgeneratorai.api_key') ? true : false;
         return view('altgeneratorai::index', [
             'is_api_key_set' => $is_api_key_set,
             'language' => Site::current()->locale()
@@ -33,7 +33,7 @@ class AltGeneratorController extends CpController
                 continue;
             }
 
-            $access_token = env('ALT_GENERATOR_API_KEY');
+            $access_token = config('altgeneratorai.api_key');
             if (!$access_token) {
                 return response()->json([
                     'error' => 'API key not found. Please check your environment variables.',
