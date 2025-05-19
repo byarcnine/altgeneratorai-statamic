@@ -14,7 +14,7 @@
         class="w-12 h-12 object-cover rounded"
       />
     </td>
-    <td class="wrap-anywhere">{{ asset.filename }}</td>
+    <td class="wrap-anywhere break-all">{{ asset.filename }}</td>
     <td>{{ asset.current_alt }}</td>
     <td>
       <div v-if="asset.generated_alt" class="alt-text-content">
