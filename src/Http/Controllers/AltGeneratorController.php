@@ -114,13 +114,26 @@ class AltGeneratorController extends CpController
             $assets = $assets->concat($containerAssets);
         }
 
+        // Calculate total count of assets without alt tags
+        $assetsWithoutAlt = $assets->filter(function ($asset) {
+            return empty($asset->get('alt'));
+        })->count();
+
+        // Filter assets without alt tags if requested
+        if ($request->get('missing_alt_only', false)) {
+            $assets = $assets->filter(function ($asset) {
+                return empty($asset->get('alt'));
+            })->values(); // Reset array keys after filtering
+        }
+
         // Paginate the combined collection
         $perPage = 25;
         $currentPage = $request->get('page', 1);
+        $total = $assets->count();
         $paginatedAssets = $assets->forPage($currentPage, $perPage);
         $assets = new \Illuminate\Pagination\LengthAwarePaginator(
             $paginatedAssets,
-            $assets->count(),
+            $total,
             $perPage,
             $currentPage,
             ['path' => $request->url()]
@@ -146,6 +159,8 @@ class AltGeneratorController extends CpController
             'last_page' => $assets->lastPage(),
             'per_page' => $perPage,
             'total' => $assets->total(),
+            'missing_alt_only' => $request->get('missing_alt_only', false),
+            'assets_without_alt_count' => $assetsWithoutAlt,
         ]);
     }
 }
