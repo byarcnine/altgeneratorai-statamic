@@ -218,7 +218,7 @@ export default {
 
           // Fetch assets for the current page with missing alt only
           const response = await axios.get(
-            `/altgeneratorai/assets?page=${currentPage}&missing_alt_only=true`,
+            `/altgeneratorai/assets?page=${currentPage}&missing_alt_only=true&per_page=10`,
             {
               headers: {
                 "X-CSRF-TOKEN": window.csrf_token,

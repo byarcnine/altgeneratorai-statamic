@@ -127,7 +127,7 @@ class AltGeneratorController extends CpController
         }
 
         // Paginate the combined collection
-        $perPage = 25;
+        $perPage = $request->get('per_page', 25);
         $currentPage = $request->get('page', 1);
         $total = $assets->count();
         $paginatedAssets = $assets->forPage($currentPage, $perPage);
