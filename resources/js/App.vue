@@ -88,6 +88,7 @@ export default {
               "X-CSRF-TOKEN": window.csrf_token,
             },
             withCredentials: true,
+            timeout: 1000 * 60 * 5,
           }
         );
         this.assets = response.data.data;
@@ -112,6 +113,7 @@ export default {
               "X-CSRF-TOKEN": window.csrf_token,
             },
             withCredentials: true,
+            timeout: 1000 * 60 * 5,
           }
         );
 
@@ -151,6 +153,7 @@ export default {
               "X-CSRF-TOKEN": window.csrf_token,
             },
             withCredentials: true,
+            timeout: 1000 * 60 * 5,
           }
         );
 
@@ -173,6 +176,7 @@ export default {
       try {
         await axios.post("/altgeneratorai/approve", {
           approvals,
+          timeout: 1000 * 60 * 5,
         });
 
         // Update the assets status
@@ -220,6 +224,7 @@ export default {
                 "X-CSRF-TOKEN": window.csrf_token,
               },
               withCredentials: true,
+              timeout: 1000 * 60 * 5,
             }
           );
 
@@ -245,6 +250,7 @@ export default {
                   "X-CSRF-TOKEN": window.csrf_token,
                 },
                 withCredentials: true,
+                timeout: 1000 * 60 * 5,
               }
             );
 
@@ -267,6 +273,7 @@ export default {
                   "X-CSRF-TOKEN": window.csrf_token,
                 },
                 withCredentials: true,
+                timeout: 1000 * 60 * 5,
               }
             );
 
